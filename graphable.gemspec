@@ -4,14 +4,18 @@ require File.expand_path('../lib/graphable/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Joe Fredette"]
   gem.email         = ["jfredett@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.description   = %q{A library for extracting static graph representations of data from rails-y databases}
+  gem.summary       = %q{A library for extracting static graph representations of data from rails-y databases}
+  gem.homepage      = "http://www.github.com/jfredett/graphable"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.name          = "graphable"
   gem.require_paths = ["lib"]
+
+  gem.add_dependency "active_support"
+  gem.add_dependency "neography"
+
   gem.version       = Graphable::VERSION
 end
