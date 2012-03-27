@@ -1,3 +1,7 @@
+require 'active_support'
+Dir["./lib/graphable/*.rb"].each do |f| require f end
+
+
 module Graphable
   extend ActiveSupport::Concern
 
@@ -79,12 +83,3 @@ module Graphable
   end
 
 end
-
-
-=begin
-
-class Foo
-  indexes :method 
-end
-
-=end
