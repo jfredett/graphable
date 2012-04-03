@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.files         = `git ls-files`.split("\n")
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.name          = "graphable"
-  gem.require_paths = ["lib"]
+  gem.require_paths = ["lib", "lib/graphable/"]
 
   gem.add_dependency "activesupport", '~> 3.1'
   gem.add_dependency "neography"
