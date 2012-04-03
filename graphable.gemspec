@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "graphable"
   gem.require_paths = ["lib"]
 
-  gem.add_dependency "active_support"
+  gem.add_dependency "activesupport", '~> 3.1'
   gem.add_dependency "neography"
 
   gem.version       = Graphable::VERSION
