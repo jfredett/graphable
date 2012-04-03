@@ -1,5 +1,8 @@
 require 'active_support'
-Dir["./lib/graphable/*.rb"].each do |f| require f end
+
+require 'graphable/node_creator'
+require 'graphable/edge_creator'
+require 'graphable/index_creator'
 
 
 module Graphable
