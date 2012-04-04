@@ -26,7 +26,6 @@ module Graphable
     protected 
 
     def load_node(n)
-      binding.pry unless n
       Graphable.index_cache[n]
     end
 
@@ -39,8 +38,9 @@ module Graphable
       Neography::Relationship.create(@name, source_node, target_node, metadata) 
     end
 
-    delegate :all => :@source
-    alias_method :sources, :all
+    def sources
+      @source.all
+    end
 
     def target_name
       @target_name ||= @target.name.pluralize.downcase.to_sym
