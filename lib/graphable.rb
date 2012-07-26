@@ -10,7 +10,7 @@ module Graphable
 
   included do
     Graphable.register NodeCreator.new(self)
-    indexes :id
+    graph_indexes :id
   end
 
   def self.register(registrant)
@@ -26,7 +26,7 @@ module Graphable
   end
 
   def self.build!
-    puts "Building Graph"
+    puts "Building Graph..."
     registry.select { |f| f.is_a? NodeCreator  }.map(&:call)
     registry.select { |f| f.is_a? IndexCreator }.map(&:call)
     registry.select { |f| f.is_a? EdgeCreator  }.map(&:call)
@@ -61,11 +61,11 @@ module Graphable
   end
 
   module ClassMethods
-    def index_name
+    def graph_index_name
       "#{name.downcase.pluralize}_index"
     end
 
-    def indexes(*methods)
+    def graph_indexes(*methods)
        methods.each do |method|
          Graphable.register IndexCreator.new(self, method) 
        end
