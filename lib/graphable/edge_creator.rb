@@ -49,6 +49,8 @@ module Graphable
 
   class ThroughEdgeCreator < EdgeCreator
     def call 
+      return if Graphable.has_completed_edge?(@source, @target, @name)
+
       puts "Building edges for #{@source.name} -> #{@target.name}"
       sources.each_slice(100) do |slice|
         slice.each do |source|
@@ -64,6 +66,8 @@ module Graphable
           end
         end
       end
+
+      Graphable.completed_edge(@source, @target, @name)
     end
 
     def targets_for(source)
@@ -79,6 +83,8 @@ module Graphable
 
   class ViaEdgeCreator < EdgeCreator
     def call 
+      return if Graphable.has_completed_edge?(@source, @target, @name)
+
       puts "Building edges for #{@source.name} -> #{@target.name}"
       sources.each do |source|
         source_node = load_node(source)
@@ -90,6 +96,8 @@ module Graphable
           build_relationship(source_node, target_node, metadata || {})
         end
       end
+
+      Graphable.completed_edge(@source, @target, @name)
     end
 
     def targets_for(source)

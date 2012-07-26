@@ -49,6 +49,17 @@ module Graphable
     completed_indicies[[klass,method]]
   end
 
+  def self.completed_edges
+    @completed_edges ||= {}
+  end
+
+  def self.completed_edge(source, target, name)
+    completed_edges[[source,target,name]] = true
+  end
+
+  def self.has_completed_edge?(source, target, name)
+    completed_edges[[source,target,name]]
+  end
 
 
   module InstanceMethods
