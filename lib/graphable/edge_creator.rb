@@ -51,7 +51,7 @@ module Graphable
     def call 
       return if Graphable.has_completed_edge?(@source, @target, @name)
 
-      puts "Building edges for #{@source.name} -> #{@target.name}"
+      puts "Building #{@name} edges for #{@source.name} -> #{@target.name}"
       sources.each_slice(100) do |slice|
         slice.each do |source|
           source_node = load_node(source)
@@ -86,7 +86,7 @@ module Graphable
     def call 
       return if Graphable.has_completed_edge?(@source, @target, @name)
 
-      puts "Building edges for #{@source.name} -> #{@target.name}"
+      puts "Building #{@name} edges for #{@source.name} -> #{@target.name}"
       sources.each do |source|
         source_node = load_node(source)
 

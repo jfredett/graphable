@@ -13,7 +13,7 @@ module Graphable
     def call
       return if Graphable.has_indexed?(@klass, @method)
 
-      puts "Building index for #{name}"
+      puts "Building #{@method} index for #{name}"
       Graphable.neo.create_node_index(graph_index_name, 'exact') # fulltext
 
       Graphable.objects_of(@klass).to_a.each do |object|
