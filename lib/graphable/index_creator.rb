@@ -3,7 +3,7 @@ module Graphable
     extend Forwardable
 
     attr_reader :klass
-    delegate [:name, :all, :graph_index_name] => :@klass
+    delegate [:name, :graph_index_name] => :@klass
 
     def initialize(klass, method)
       @klass = klass
@@ -16,7 +16,7 @@ module Graphable
       puts "Building index for #{name}"
       Graphable.neo.create_node_index(graph_index_name, 'exact') # fulltext
 
-      all.to_a.each do |object|
+      Graphable.objects_of(@klass).to_a.each do |object|
         Graphable.neo.add_node_to_index(graph_index_name, @method, object.send(@method), Graphable.index_cache[object])
       end
 

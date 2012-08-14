@@ -5,7 +5,7 @@ module Graphable
     extend Forwardable
 
     attr_reader :klass
-    delegate [:name, :all] => :@klass
+    delegate [:name] => :@klass
 
     def initialize(klass)
       @klass = klass
@@ -13,7 +13,7 @@ module Graphable
 
     def call 
       puts "Building nodes for #{name}"
-      all.each_slice(100) do |slice|
+      Graphable.objects_of(@klass).each_slice(100) do |slice|
         slice.each do |object|
           Graphable.index_cache[object] = Neography::Node.create(object.to_node) 
         end

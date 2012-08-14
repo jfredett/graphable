@@ -39,7 +39,7 @@ module Graphable
     end
 
     def sources
-      @source.all
+      Graphable.objects_of(@source)
     end
 
     def target_name
@@ -61,6 +61,7 @@ module Graphable
             metadata = intermediate_target.send(:edge_metadata) if intermediate_target.respond_to?(:edge_metadata)
 
             target_node = load_node(intermediate_target.send(target_name)) rescue binding.pry
+            next unless source_node && target_node
 
             build_relationship(source_node, target_node, metadata || {})
           end
@@ -93,6 +94,8 @@ module Graphable
           metadata = @metadata_proc.call(target) if @metadata_proc
 
           target_node = load_node(target) rescue binding.pry
+          next unless source_node && target_node
+
           build_relationship(source_node, target_node, metadata || {})
         end
       end

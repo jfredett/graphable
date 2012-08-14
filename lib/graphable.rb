@@ -41,6 +41,18 @@ module Graphable
     @completed_indicies ||= {}
   end
 
+  def self.object_access_methods
+    @object_access_methods ||= {}
+  end
+
+  def self.objects_of(klass)
+    klass.send(object_access_methods[klass] || 'all')
+  end
+
+  def self.register_object_access_method(klass, method)
+    object_access_methods[klass] = method
+  end
+
   def self.completed_index(klass, method)
     completed_indicies[[klass, method]] = true
   end
@@ -60,7 +72,6 @@ module Graphable
   def self.has_completed_edge?(source, target, name)
     completed_edges[[source,target,name]]
   end
-
 
   module InstanceMethods
     def to_node
@@ -93,6 +104,10 @@ module Graphable
       else
         raise "Invalid Edge type, must be :through or :via"
       end
+    end
+
+    def graph_with(method)
+      Graphable.register_object_access_method(self, method)
     end
   end
 
