@@ -2,8 +2,8 @@
 require File.expand_path('../lib/graphable/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Joe Fredette"]
-  gem.email         = ["jfredett@gmail.com"]
+  gem.authors       = ["Joe Fredette", "Andrew Ross"]
+  gem.email         = ["jfredett@gmail.com", "andrewslavinross@gmail.com"]
   gem.description   = %q{A library for extracting static graph representations of data from rails-y databases}
   gem.summary       = %q{A library for extracting static graph representations of data from rails-y databases}
   gem.homepage      = "http://www.github.com/jfredett/graphable"
