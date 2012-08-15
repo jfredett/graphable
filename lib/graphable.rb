@@ -76,7 +76,7 @@ module Graphable
   module InstanceMethods
     def to_node
       attributes.to_hash.tap do |hash|
-        hash.each { |k, _| hash.delete(k) if k.to_s =~ /_id$/ } #remove FKs
+        hash.each { |k, v| hash.delete(k) if v.nil? || k.to_s =~ /_id$/ } #remove FKs and nil values
         hash[:type] = self.class.name
       end
     end

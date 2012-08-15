@@ -16,8 +16,10 @@ module Graphable
       puts "Building #{@method} index for #{name}"
       Graphable.neo.create_node_index(graph_index_name, 'exact') # fulltext
 
-      Graphable.objects_of(@klass).to_a.each do |object|
-        Graphable.neo.add_node_to_index(graph_index_name, @method, object.send(@method), Graphable.index_cache[object])
+      Graphable.objects_of(@klass).each_slice(250) do |slice|
+        Graphable.neo.batch(*slice.map do |obj|
+          [:add_node_to_index, graph_index_name, @method, obj.send(@method), Graphable.index_cache[obj]] 
+        end)
       end
 
       Graphable.completed_index(@klass, @method)

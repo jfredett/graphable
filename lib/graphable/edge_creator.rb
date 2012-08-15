@@ -35,7 +35,7 @@ module Graphable
       # anyway.
       metadata.reject! { |_,v| v.nil? } 
 
-      Neography::Relationship.create(@name, source_node, target_node, metadata) 
+      Graphable.neo.create_relationship(@name, source_node, target_node, metadata) 
     end
 
     def sources
@@ -52,20 +52,20 @@ module Graphable
       return if Graphable.has_completed_edge?(@source, @target, @name)
 
       puts "Building #{@name} edges for #{@source.name} -> #{@target.name}"
-      sources.each_slice(100) do |slice|
-        slice.each do |source|
-          source_node = load_node(source)
-
-          intermediates_for(source).each do |intermediate_target|
+      sources.each_slice(250) do |slice|
+        Graphable.neo.batch(*slice.map { |obj|
+          source_node = load_node(obj)
+          relationships = []
+          intermediates_for(obj).each do |intermediate_target|
+            metadata = {}
             metadata = @metadata_proc.call(intermediate_target) if @metadata_proc
             metadata = intermediate_target.send(:edge_metadata) if intermediate_target.respond_to?(:edge_metadata)
-
             target_node = load_node(intermediate_target.send(target_name)) rescue binding.pry
             next unless source_node && target_node
-
-            build_relationship(source_node, target_node, metadata || {})
+            relationships << [:create_relationship, @name, source_node, target_node, metadata || {}]
           end
-        end
+          relationships
+        }.flatten(1))
       end
 
       Graphable.completed_edge(@source, @target, @name)
@@ -87,17 +87,19 @@ module Graphable
       return if Graphable.has_completed_edge?(@source, @target, @name)
 
       puts "Building #{@name} edges for #{@source.name} -> #{@target.name}"
-      sources.each do |source|
-        source_node = load_node(source)
-
-        targets_for(source).each do |target|
-          metadata = @metadata_proc.call(target) if @metadata_proc
-
-          target_node = load_node(target) rescue binding.pry
-          next unless source_node && target_node
-
-          build_relationship(source_node, target_node, metadata || {})
-        end
+      sources.each_slice(250) do |slice|
+        Graphable.neo.batch(*slice.map { |obj|
+          source_node = load_node(obj)
+          relationships = []
+          targets_for(obj).each do |target|
+            metadata = {}
+            metadata = @metadata_proc.call(target) if @metadata_proc
+            target_node = load_node(target) rescue binding.pry
+            next unless source_node && target_node
+            relationships << [:create_relationship, @name, source_node, target_node, metadata]
+          end
+          relationships
+        }.flatten(1))
       end
 
       Graphable.completed_edge(@source, @target, @name)

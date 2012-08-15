@@ -13,9 +13,12 @@ module Graphable
 
     def call 
       puts "Building nodes for #{name}"
-      Graphable.objects_of(@klass).each_slice(100) do |slice|
-        slice.each do |object|
-          Graphable.index_cache[object] = Neography::Node.create(object.to_node) 
+      Graphable.objects_of(@klass).each_slice(250) do |slice|
+        nodes = Graphable.neo.batch(*slice.map do |obj| 
+          [:create_node, obj.to_node]
+        end)
+        slice.zip(nodes).each do |object, node|
+          Graphable.index_cache[object] = node["body"]
         end
       end
     end
